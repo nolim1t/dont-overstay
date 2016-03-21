@@ -11,7 +11,7 @@ class TestInitializer < MiniTest::Unit::TestCase
     result = @daytracker.query
     assert_equal current_time.to_i, result[:before].to_i
   end
-  
+
   def test_that_after_is_one_year_ago
     three_sixty_five_days_ago = (Date.today - 365).to_time.to_i
     result = @daytracker.query
@@ -21,5 +21,10 @@ class TestInitializer < MiniTest::Unit::TestCase
   def test_default_padded_days
     result = @daytracker.query
     assert_equal result[:padded_days], 0
+  end
+
+  def test_last_seen_algorithm
+    seven_days_ago = (Date.today - 7).to_time.to_i
+    assert_equal (Time.now.to_i - seven_days_ago) / 86400, 7
   end
 end
