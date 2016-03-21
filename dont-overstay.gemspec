@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'dont-overstay'
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
   s.date        = '2016-03-21'
   s.summary     = "Useful Ruby gem for digital nomads for keeping under the 180 day rule"
   s.description = "Useful Ruby gem for digital nomads for keeping under the 180 day rule by working out how long was spent in each country that was visited in the last XXX days"
