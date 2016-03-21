@@ -24,6 +24,9 @@ class Daytracker
         requested_url = @full_url + '&afterTimestamp=' + after.to_s + '&beforeTimestamp=' + before.to_s
         after_timestamp = after
         before_timestamp = before
+        last_country_code = ""
+        last_country_name = ""
+
         begin
           while (after_timestamp + 3600) < Time.now.to_i
             requested_url = @full_url + '&afterTimestamp=' + after_timestamp.to_s + '&beforeTimestamp=' + before_timestamp.to_s
@@ -50,11 +53,8 @@ class Daytracker
                   end
                 end
                 after_timestamp = checkin["createdAt"].to_i + 1800 # Set the createdAt to after Timestamp
-                #puts checkin["createdAt"]
-                #puts checkin["venue"]["location"]["cc"]
-                #puts country_list.inspect
-                #puts checkin["venue"]["location"]["country"]
-                #puts "---"
+                last_country_code = checkin["venue"]["location"]["cc"].to_s
+                last_country_name = checkin["venue"]["location"]["country"].to_s
               }
               if checkins.length == 0 then
                 after_timestamp += 1800
@@ -72,7 +72,8 @@ class Daytracker
         rescue
           {:status => "Exception found #{$!}"}
         end
-        {:status => "OK", countries: country_list}
+        days_since_last_ts = (Time.now.to_i - after_timestamp.to_i) / 86400
+        {:status => "OK", countries: country_list, last_seen: {days: days_since_last_ts, country: {code: last_country_code, name: last_country_name}}}
       else
         {:status => "Before time is too soon"}
       end
