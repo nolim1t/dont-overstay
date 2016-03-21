@@ -12,7 +12,12 @@ class Daytracker
     end
   end
 
-  def query(before=Time.now.to_i, after=Time.now.to_i - 31536000)
+  def query(before=Time.now.to_i, after=((Date.today - 365).to_time.to_i), padded_days=0)
+    if ENV['dryrun'] then
+      if ENV['dryrun'] == "true" then
+      return {:status => "Test", before: before, after: after, padded_days: (padded_days || 0)}
+      end
+    end
     country_list = []
     if @full_url != nil then
       if before.to_i + 3600 > Time.now.to_i then
@@ -30,7 +35,7 @@ class Daytracker
             if meta["code"] == 200 then
               checkins.each{|checkin|
                 if country_list.length == 0 then
-                  country_list << {:visit => checkin["createdAt"].to_i, :code => checkin["venue"]["location"]["cc"].to_s, :name => checkin["venue"]["location"]["country"].to_s, length: 1}
+                  country_list << {:visit => checkin["createdAt"].to_i, :code => checkin["venue"]["location"]["cc"].to_s, :name => checkin["venue"]["location"]["country"].to_s, length: padded_days.to_i}
                 else
                   if country_list[country_list.length - 1][:code] == checkin["venue"]["location"]["cc"] then
                     # Work out days between the last checkin
@@ -41,7 +46,7 @@ class Daytracker
                     country_list[country_list.length - 1][:length] = days.to_i # Set the number of days stayed here
                   else
                     # Then just create a new entry
-                    country_list << {:visit => checkin["createdAt"].to_i, :code => checkin["venue"]["location"]["cc"].to_s, :name => checkin["venue"]["location"]["country"].to_s, length: 1}
+                    country_list << {:visit => checkin["createdAt"].to_i, :code => checkin["venue"]["location"]["cc"].to_s, :name => checkin["venue"]["location"]["country"].to_s, length: padded_days.to_i}
                   end
                 end
                 after_timestamp = checkin["createdAt"].to_i + 1800 # Set the createdAt to after Timestamp
