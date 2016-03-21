@@ -1,4 +1,4 @@
-[![Gem Version](https://badge.fury.io/rb/dont-overstay.svg)](https://badge.fury.io/rb/dont-overstay)
+[![Gem Version](https://badge.fury.io/rb/dont-overstay.svg)](https://badge.fury.io/rb/dont-overstay) [![Build Status](https://travis-ci.org/nolim1t/dont-overstay.svg?branch=master)](https://travis-ci.org/nolim1t/dont-overstay)
 
 ## What
 This is a simple base gem for calculating number of days stayed in a country (for nomads).
