@@ -72,7 +72,7 @@ class Daytracker
         rescue
           {:status => "Exception found #{$!}"}
         end
-        days_since_last_ts = (Time.now.to_i - after_timestamp.to_i) / 86400
+        days_since_last_ts = (Time.now.to_i - after_timestamp.to_i).abs / 86400
         {:status => "OK", countries: country_list, last_seen: {days: days_since_last_ts, country: {code: last_country_code, name: last_country_name}}}
       else
         {:status => "Before time is too soon"}
